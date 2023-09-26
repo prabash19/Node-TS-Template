@@ -8,6 +8,7 @@ import {
   connectMongo,
   connectRedis,
 } from "./utils/database.js";
+import ErrorMiddleware from "./middleware/Error.js";
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
@@ -29,11 +30,11 @@ connectMongo(keys.mongo);
 connectRedis(keys.redis);
 connectClouinary(keys.cloudnaryName, keys.cloudnaryKey, keys.cloudnaryApi);
 
-//for undefined routes:
+//for all undefined routes:
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   const err = new Error(`Route ${req.originalUrl} Not Found`) as any;
   err.statusCode = 404;
   next(err);
 });
-
+app.use(ErrorMiddleware);
 export default app;
