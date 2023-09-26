@@ -3,7 +3,11 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import keys from "./keys.js";
-import connectMongo from "./utils/DB.js";
+import {
+  connectClouinary,
+  connectMongo,
+  connectRedis,
+} from "./utils/database.js";
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
@@ -20,7 +24,10 @@ app.get("/test", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json("API working");
 });
 
+//Connect Storage
 connectMongo(keys.mongo);
+connectRedis(keys.redis);
+connectClouinary(keys.cloudnaryName, keys.cloudnaryKey, keys.cloudnaryApi);
 
 //for undefined routes:
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
