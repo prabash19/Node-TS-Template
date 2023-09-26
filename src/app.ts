@@ -8,8 +8,8 @@ import {
   connectMongo,
   connectRedis,
 } from "./utils/database.js";
-import ErrorMiddleware from "./middleware/Error.js";
-
+import ErrorMiddleware from "./middleware/error.js";
+import apiRoutes from "./routes/index.js";
 const app = express();
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
@@ -21,14 +21,15 @@ app.use(
   })
 );
 
-app.get("/test", (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json("API working");
-});
-
 //Connect Storage
 connectMongo(keys.mongo);
 connectRedis(keys.redis);
 connectClouinary(keys.cloudnaryName, keys.cloudnaryKey, keys.cloudnaryApi);
+
+app.get("/test", (req: Request, res: Response, next: NextFunction) => {
+  res.status(200).json("API working");
+});
+app.use("/api", apiRoutes);
 
 //for all undefined routes:
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
