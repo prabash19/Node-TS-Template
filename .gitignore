@@ -1,0 +1,16 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+*.js.map
+
+# Compiled output
+/dist/
+*.log
+*.pid
+*.out
+
+#envs
+*.env
